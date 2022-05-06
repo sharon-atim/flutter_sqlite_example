@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import '../user_model.dart';
+import '../models/user_model.dart';
 
 // Takes care of all the operations regarding SQLite database.
 class DatabaseHandler {
@@ -41,5 +41,15 @@ class DatabaseHandler {
         await db.query('users'); // Queries the 'users' table.
 // For each element in the query result list, transform into a list.
     return queryResult.map((e) => User.fromMap(e)).toList();
+  }
+
+// This async function deletes data from the database.
+  Future<void> deleteUser(int id) async {
+    final db = await initializeDB();
+    await db.delete(
+      'users',
+      where: "id = ?",
+      whereArgs: [id],
+    );
   }
 }
