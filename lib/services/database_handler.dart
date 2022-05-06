@@ -47,6 +47,7 @@ class DatabaseHandler {
   Future<void> deleteUser(int id) async {
     final db = await initializeDB();
     await db.delete(
+      // Table name and row id to be deleted
       'users',
       where: "id = ?",
       whereArgs: [id],
