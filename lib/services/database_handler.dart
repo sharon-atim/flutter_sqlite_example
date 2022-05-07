@@ -3,19 +3,19 @@ import 'package:path/path.dart';
 
 import '../models/user_model.dart';
 
-// Takes care of all the operations regarding SQLite database.
+// Database Handler Helper Class takes care of all the operations regarding SQLite database.
 class DatabaseHandler {
 // This async function initializes the database, opens it then creates a table.
   Future<Database> initializeDB() async {
     String path = await getDatabasesPath(); // Gets the database location.
     return openDatabase(
       // Opens the database at the given path.
-      join(path, 'example.db'),
+      join(path, 'usersDatabase.db'),
       onCreate: (database, version) async {
         await database.execute(
           // Executes SQL query.
           // Creates a table
-          "CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL,age INTEGER NOT NULL, country TEXT NOT NULL, email TEXT)",
+          '''CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL,age INTEGER NOT NULL, country TEXT NOT NULL, email TEXT)''',
         );
       },
       version: 1,

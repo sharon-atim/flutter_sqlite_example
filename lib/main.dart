@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'screens/homepage.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized;
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const FlutterApp());
 }
 
