@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
     handler = DatabaseHandler(); // Instance of the DatabaseHandler class
     handler.initializeDB().whenComplete(() async {
       // Initializes the DB handler.
-      await addUsers(); // When the future is complete, addUsers is called.
+      await addUsers(); // When the future is complete, addUsers to database.
       setState(() {});
     });
   }
@@ -53,7 +53,46 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return MaterialApp();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Sqlite Demo'),
+        backgroundColor: Colors.lightBlueAccent,
+      ),
+      body: FutureBuilder(
+          future: handler.retrieveUsers(),
+          builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data?.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Dismissible(
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      color: Colors.redAccent,
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: const Icon(Icons.delete_forever),
+                    ),
+                    key: ValueKey<int>(snapshot.data![index].id!),
+                    onDismissed: (DismissDirection direction) async {
+                      await handler.deleteUser(snapshot.data![index].id!);
+                      setState(() {
+                        snapshot.data!.remove(snapshot.data![index]);
+                      });
+                    },
+                    child: Card(
+                        child: ListTile(
+                      contentPadding: const EdgeInsets.all(8.0),
+                      title: Text(snapshot.data![index].name),
+                      subtitle: Text(snapshot.data![index].age.toString()),
+                    )),
+                  );
+                },
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          }),
+    );
   }
 }
