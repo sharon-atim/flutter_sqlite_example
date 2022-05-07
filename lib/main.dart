@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'screens/homepage.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized;
   runApp(const FlutterApp());
 }
 
@@ -12,6 +13,7 @@ class FlutterApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
